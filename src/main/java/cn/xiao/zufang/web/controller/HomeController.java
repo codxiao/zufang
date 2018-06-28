@@ -26,7 +26,7 @@ public class HomeController {
     public String accessErrorPage(){
         return "403";
     }
-    @GetMapping("/logout")
+    @GetMapping("/logout/page")
     public String logoutPage(){
         return "logout";
     }

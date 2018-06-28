@@ -1,6 +1,8 @@
 package cn.xiao.zufang.config;
 
 import cn.xiao.zufang.security.AuthProvider;
+import cn.xiao.zufang.security.LoginAuthFailHandler;
+import cn.xiao.zufang.security.LoginUrlEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,7 +32,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")//配置角色登录处理入口
-                .and();
+                .failureHandler(authFailHandler())
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/logout/page")
+                .deleteCookies("JSESSION")
+                .invalidateHttpSession(true)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(loginUrlEntryPoint())
+                .accessDeniedPage("/403");
 
 
         http.csrf().disable();
@@ -50,7 +62,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return new AuthProvider();
 }
 
+    @Bean
+    public LoginUrlEntryPoint loginUrlEntryPoint(){
+        return new LoginUrlEntryPoint("/user/login");
+    }
 
-
+    @Bean
+    public LoginAuthFailHandler authFailHandler(){
+        return new LoginAuthFailHandler(loginUrlEntryPoint());
+    }
 
 }

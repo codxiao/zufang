@@ -13,9 +13,9 @@ public class AdminController {
     public String wekcomePage(){
         return "admin/welcome";
     }
-    @GetMapping("user/login")
+    @GetMapping("admin/login")
     public String loginPage(){
-        return "user/login";
+        return "admin/login";
     }
 
 }
